@@ -22,12 +22,14 @@ connection.connect(err => {
 const products = [
     {
         id: 1,
+        department_name: "Shoes",
         name: "Jordan 13 Retro",
         price: 220.00,
         stock_quantity: 100
     },
     {
         id: 2,
+        department_name: "Shoes",
         name: "Jordan 11",
         price: 230.00,
         stock_quantity: 100
@@ -35,7 +37,8 @@ const products = [
     },
     {
         id: 3,
-        name: "jordan 7 retro",
+        department_name: "Shoes",
+        name: "Jordan 7 retro",
         price: 220.00,
         stock_quantity: 100
 
@@ -88,7 +91,7 @@ const displayProducts = () => {
     // connect to the database
     // select * from products;
     // display each product (can use a package for nice display)
-    const data = products.map(product => [product.id, product,name, product.price, product.stock_quantity]);
+    const data = products.map(product => [product.id, product.department_name, product.name, product.price, product.stock_quantity]);
     console.log(table(data));
 }
 
