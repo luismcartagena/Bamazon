@@ -1,22 +1,22 @@
-const inquirer = require("inquier");
+const inquirer = require("inquirer");
 const mysql = require("mysql");
 const table = require("table").table;
 
-// const connection = mysql.createConnection({
-//     password: "root",
-//     user: "root",
-//     host: "localhost",
-//     port: 3306,
-//     database: "bamazon_db"
-// });
+const connection = mysql.createConnection({
+    password: "MajorasMask64!",
+    user: "root",
+    host: "localhost",
+    port: 3306,
+    database: "bamazon_db"
+});
 
-// connection.connect(err => {
-//     if (err) {
-//         throw err;
-//     }
+connection.connect(err => {
+    if (err) {
+        throw err;
+    }
 
-//     start();
-// })
+    start();
+})
 
 
 const products = [
