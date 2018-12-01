@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const table = require("table").table;
 
 const connection = mysql.createConnection({
-    password: "MajorasMask64!",
+    password: "",
     user: "root",
     host: "localhost",
     port: 3306,
