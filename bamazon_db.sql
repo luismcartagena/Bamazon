@@ -17,7 +17,7 @@ CREATE TABLE products
 
 INSERT INTO products (department_name, name, price, stock_quantity) VALUES 
 ("Groceries", "Avocado", 1.50, 100),
-("Groceries", "Tortillas (12)", 3.00, 60),
+("Groceries", "Tortillas (12pk)", 3.00, 60),
 ("Shoes", "KEEN Hiking Boots", 150.00, 100),
 ("Camping", "Kelty Monarch Tent", 169.99, 100),
 ("Outdoors", "OUTAD Traction Cleats", 62.99, 15),

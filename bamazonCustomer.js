@@ -16,37 +16,35 @@ const loadApp = () => {
     if (err) {
       throw err;
     }
-    console.log("connected as id " + connection.threadId + "\n");
+    console.log(`\nSuccess, connected as id: ${connection.threadId}\n\n`);
     displayProducts();
   });
 };
 
 // Display the main table of products
 const displayProducts = () => {
+  console.log(`               WELCOME TO BAMAZON\n\n`);
+
   // connect to the database
-  connection.query("SELECT * FROM products", (err, result) => {
+  connection.query("SELECT * FROM products", (err, res) => {
     if (err) {
       throw err;
     }
 
     // display each product
-    const data = result.map(result => [
-      result.id,
-      result.department_name,
-      result.name,
-      result.price,
-      result.stock_quantity
+    const products = res.map(res => [
+      res.id,
+      // res.department_name,
+      res.name,
+      res.price,
+      res.stock_quantity
     ]);
-    console.log(
-      ` id    Department    Product Name                 Cost($)  Stock`
-    );
-    console.log(table(data));
-    // getUserAction();
-    //     getUserAction();
-    //   });
-    // };
 
-    // const getUserAction = (array) => {
+    // console.log(res[0].name);
+
+    console.log(` id    Product Name                 Cost($)  Stock`);
+    console.log(table(products));
+
     inquirer
       .prompt([
         {
@@ -73,22 +71,23 @@ const displayProducts = () => {
       .then(answers => {
         // safe guard that they enter an existing ID
         connection.query(
-          "SELECT id, stock_quantity FROM products WHERE ?",
-          [{name: answers.choice}],
-          (err, result) => {
+          "SELECT id, name, stock_quantity FROM products WHERE ?",
+          [{ id: answers.choice }],
+          (err, res) => {
+            // console.log(res);
             if (err) {
               throw err;
             }
-            if (answers.quantity > result[0].stock_quantity) {
+            if (answers.quantity > res[0].stock_quantity) {
               console.log(
-                `There is only ${
-                  result[0].stock_quantity
-                } units of that product currently in stock. Please enter a different amount to buy.`
+                `\n\n\OOPS! WE'VE RAN OUT!! Only ${
+                  res[0].stock_quantity
+                } unit(s) in stock. Please try again.\n\n\n`
               );
               displayProducts();
             } else {
-              let newQuantity = result[0].stock_quantity - answers.quantity;
-              updateStock(answers.quantity, newQuantity, result[0].id);
+              let newQuantity = res[0].stock_quantity - answers.quantity;
+              updatedInventory(answers.quantity, newQuantity, res[0].id);
             }
           }
         );
@@ -96,41 +95,45 @@ const displayProducts = () => {
   });
 };
 
+
 // Update stock_quantity
+const updatedInventory = (quantityPurchased, newQuantity, id) => {
+  
+  let inventory = [];
+  inventory.push(newQuantity, id);
 
-// const updateStock = () => {
-//     // connect to the database
-//     connection.query(
-//       "UPDATE products SET stock_quantity = ? WHERE id = ?",
-//       [req.body.stock_quantity, req.params.id],
-//       function(err, result) {
-//         if (err) {
-//           throw err;
-//         } else if (result.changedRows === 0) {
-//           // If no rows were changed, then the ID must not exist, so 404
-//           console.log("id does not exist");
-//           displayProducts();
-//         }
-//         result.status(200).end();
-//       }
-//     );
-//   };
+  // connect to the database
+  connection.query(
+    "UPDATE products SET stock_quantity = ? WHERE id = ?",
+    inventory,
+    (err, res) => {
+      if (err) {
+        throw err;
+      }
 
-// Create a new movie
-// app.post("/movies", function(req, res) {
-//   connection.query(
-//     "INSERT INTO movies (movie) VALUES (?)",
-//     [req.body.movie],
-//     function(err, result) {
-//       if (err) {
-//         return res.status(500).end();
-//       }
+      // If no rows were changed, then the ID must not exist, so 404
+      console.log("~ Stock Quantity Updated ~");
+      displayCost();
+    }
+  );
+};
 
-//       // Send back the ID of the new movie
-//       res.json({ id: result.insertId });
-//       console.log({ id: result.insertId });
-//     }
-//   );
-// });
+// Display Updated Inventory
+const displayCost = (quantityPurchased, id) => {
+  
+  let totalInventory = [];
+  totalInventory.push(quantityPurchased, id);
+
+  connection.query(
+    "SELECT name, ? * price AS Total FROM products WHERE id = ?", 
+    totalInventory, 
+    (err, res) => {
+        if (err) {
+            throw err;
+        }
+        let totalPrice = res[0].Total.toFixed(2);
+        console.log(`You purchased ${quantityPurchased} units of ${res[0].name} for a total cost of $${totalPrice}.`);
+    });
+};
 
 loadApp();
