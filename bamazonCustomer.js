@@ -87,7 +87,7 @@ const displayProducts = () => {
               displayProducts();
             } else {
               let newQuantity = res[0].stock_quantity - answers.quantity;
-              updatedInventory(answers.quantity, newQuantity, res[0].id);
+              updatedInventory(answers.quantity, newQuantity, res[0].id); // passed arguments
             }
           }
         );
@@ -97,7 +97,7 @@ const displayProducts = () => {
 
 
 // Update stock_quantity
-const updatedInventory = (quantityPurchased, newQuantity, id) => {
+const updatedInventory = (quantityPurchased, newQuantity, id) => {  // defined parameters
   
   let inventory = [];
   inventory.push(newQuantity, id);
@@ -113,27 +113,30 @@ const updatedInventory = (quantityPurchased, newQuantity, id) => {
 
       // If no rows were changed, then the ID must not exist, so 404
       console.log("~ Stock Quantity Updated ~");
-      displayCost();
+      displayCost(quantityPurchased, id);
     }
   );
 };
 
 // Display Updated Inventory
 const displayCost = (quantityPurchased, id) => {
-  
+  console.log(id);
   let totalInventory = [];
   totalInventory.push(quantityPurchased, id);
 
   connection.query(
-    "SELECT name, ? * price AS Total FROM products WHERE id = ?", 
+    "SELECT name, ? * price AS total FROM products WHERE id = ?", 
     totalInventory, 
     (err, res) => {
+      console.log(res);
         if (err) {
             throw err;
         }
-        let totalPrice = res[0].Total.toFixed(2);
+        let totalPrice = res[0].total.toFixed(2);
         console.log(`You purchased ${quantityPurchased} units of ${res[0].name} for a total cost of $${totalPrice}.`);
+        // displayProducts();
     });
+
 };
 
 loadApp();
