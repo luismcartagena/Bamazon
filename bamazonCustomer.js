@@ -80,9 +80,9 @@ const displayProducts = () => {
             }
             if (answers.quantity > res[0].stock_quantity) {
               console.log(
-                `\n\n\OOPS! WE'VE RAN OUT!! Only ${
+                `\n\nOOPS! Insufficient quantity!! Only ${
                   res[0].stock_quantity
-                } unit(s) in stock. Please try again.\n\n\n`
+                } unit(s) left in stock.\n- -\nPlease select a different quantity.\n\n`
               );
               displayProducts();
             } else {
