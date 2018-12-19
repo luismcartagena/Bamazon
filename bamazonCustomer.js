@@ -16,14 +16,14 @@ const loadApp = () => {
     if (err) {
       throw err;
     }
-    console.log(`\nSuccess, connected as id: ${connection.threadId}\n\n`);
+    console.log(`\nSuccess, connected as id: ${connection.threadId}\n`);
     displayProducts();
   });
 };
 
 // Display the main table of products
 const displayProducts = () => {
-  console.log(`               WELCOME TO BAMAZON\n\n`);
+  console.log(`\n             -- WELCOME TO BAMAZON --\n\n`);
 
   // connect to the database
   connection.query("SELECT * FROM products", (err, res) => {
@@ -95,10 +95,10 @@ const displayProducts = () => {
   });
 };
 
-
 // Update stock_quantity
-const updatedInventory = (quantityPurchased, newQuantity, id) => {  // defined parameters
-  
+const updatedInventory = (quantityPurchased, newQuantity, id) => {
+  // defined parameters
+
   let inventory = [];
   inventory.push(newQuantity, id);
 
@@ -111,8 +111,6 @@ const updatedInventory = (quantityPurchased, newQuantity, id) => {  // defined p
         throw err;
       }
 
-      // If no rows were changed, then the ID must not exist, so 404
-      console.log("~ Stock Quantity Updated ~");
       displayCost(quantityPurchased, id);
     }
   );
@@ -120,23 +118,48 @@ const updatedInventory = (quantityPurchased, newQuantity, id) => {  // defined p
 
 // Display Updated Inventory
 const displayCost = (quantityPurchased, id) => {
-  console.log(id);
+  // console.log(id);
   let totalInventory = [];
   totalInventory.push(quantityPurchased, id);
 
   connection.query(
-    "SELECT name, ? * price AS total FROM products WHERE id = ?", 
-    totalInventory, 
+    "SELECT name, ? * price AS total FROM products WHERE id = ?",
+    totalInventory,
     (err, res) => {
-      console.log(res);
-        if (err) {
-            throw err;
-        }
-        let totalPrice = res[0].total.toFixed(2);
-        console.log(`You purchased ${quantityPurchased} units of ${res[0].name} for a total cost of $${totalPrice}.`);
-        // displayProducts();
-    });
+      // console.log(res);
+      if (err) {
+        throw err;
+      }
+      let totalPrice = res[0].total.toFixed(2);
+      console.log(
+        `\nSuccess!!\nYou purchased ${quantityPurchased} units of ${
+          res[0].name
+        } for a total cost of $${totalPrice}.`
+      );
+      console.log(`*Stock quanitity updated.*\n`)
+      keepShopping();
+    }
+  );
 
 };
+
+const keepShopping = () => {
+
+  inquirer.prompt([
+    {
+      type: "confirm",
+      message: "Would you like to keep shopping?",
+      name: "answer"
+    
+    }
+  ]).then(confirm => {
+    if (confirm.answer == true) {
+      displayProducts();
+    } else {
+      console.log(`\nThanks for shopping at Bamazon! Come again soon.\n`)
+      connection.end();
+    }
+  });
+}
 
 loadApp();
