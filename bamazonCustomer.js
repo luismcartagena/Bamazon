@@ -134,32 +134,31 @@ const displayCost = (quantityPurchased, id) => {
       console.log(
         `\nSuccess!!\nYou purchased ${quantityPurchased} units of ${
           res[0].name
-        } for a total cost of $${totalPrice}.`
+        } for a total cost of $${totalPrice}.\n`
       );
-      console.log(`*Stock quanitity updated.*\n`)
       keepShopping();
     }
   );
-
 };
 
 const keepShopping = () => {
-
-  inquirer.prompt([
-    {
-      type: "confirm",
-      message: "Would you like to keep shopping?",
-      name: "answer"
-    
-    }
-  ]).then(confirm => {
-    if (confirm.answer == true) {
-      displayProducts();
-    } else {
-      console.log(`\nThanks for shopping at Bamazon! Come again soon.\n`)
-      connection.end();
-    }
-  });
-}
+  inquirer
+    .prompt([
+      {
+        type: "confirm",
+        message: "Would you like to keep shopping?",
+        name: "answer"
+      }
+    ])
+    .then(confirm => {
+      if (confirm.answer == true) {
+        console.log(`\n* Stock quanitity updated. *\n`);
+        displayProducts();
+      } else {
+        console.log(`\nThanks for shopping at Bamazon! Come again soon.\n`);
+        connection.end();
+      }
+    });
+};
 
 loadApp();
