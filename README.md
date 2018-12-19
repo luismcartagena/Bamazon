@@ -4,13 +4,13 @@
 
 ## Overview
 
-Bamazon is a Node-based app with Amazon-like storefront. The app takes in orders from customers and depletes stock from the store's inventory.
+Bamazon is an Amazon-like storefront that takes in orders from customers and depletes stock from the store's inventory. The app is built with node.js and MySQL.
 
 ## Instructions
 
-### Customer View
+### Customer
 
-1. Running this application will first display all of the items available for sale, along with their ids, names, prices, and stock quantity for sale.
+1. Running this application (i.e., in the the command line or terminal: node bamazonCustomer.js) will first display all of the items available for sale, along with their ids, names, prices, and stock quantity for sale.
 
 ![Screenshot](1_Bamazon.png)
 
